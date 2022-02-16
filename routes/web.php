@@ -41,7 +41,7 @@ Route::group(['prefix' => 'transaksi'], function(){
 Route::group(['prefix' => 'pengembalian'], function(){
     route::get('pengembalian', 'PengembalianController@index')->name('pengembalian.index');
     route::get('create/{id}', 'PengembalianController@create')->name('pengembalian.create');
-    route::post('store/{transaksi}','PengembalianController@store')->name('pengembalian.store');
+    route::post('store/{transactions}','PengembalianController@store')->name('pengembalian.store');
 
 });
 

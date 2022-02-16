@@ -37,6 +37,7 @@ class TransaksiController extends Controller
             'tanggal_kembali' => $request->tanggal_kembali,
             'email' => $request->email,
             'phone' => $request->phone,
+            'durasi' => $request->durasi
         ]);
 
          if ($transaction->save()) {
@@ -59,20 +60,23 @@ class TransaksiController extends Controller
              ]);
         }
 
-        Nexmo::message()->send([
-            'to'    => '+62' . $transaction->phone,
-            'from'  => 'RENTALMOBIL',
-            'text'  => 'Assalmualaikum wr. wb kami dari 
-                        RentalMobil ingin memberitahukan 
-                        bahwa pinjaman anda sudah dikembalikan berikut rinciannya',
-            'Nama Peminjam' . $transaction->name,
-            'Tanggal Pinjam' . $transaction->tgl_pinjam,
-            'Tanggal Kembali' . $transaction->tgl_pinjam,
-            'Jumlah barang' . $transaction->jumlah,
-            'Harga' . $transaction->harga,
-            'Terimakasih',
-            'PENGURUS RENTALMOBIL',
-        ]);
+        if ($transaction->save()) {
+            $datetime2 = strtotime($transaction->tanggal_kembali) ;
+            $datenow = strtotime($transaction->tanggal_pinjam);
+            $durasi = ($datenow - $datetime2) / 86400 ;
+            $durasi2 = ($durasi).'Hari';
+           
+            if ($datenow > $datetime2) {
+                'Terlambat';
+            }
+            else {
+                echo "$durasi Hari";
+            }
+
+            $transaction->update([
+                'durasi' => $durasi2
+            ]);
+        }
         return redirect()->back();
     }
 }

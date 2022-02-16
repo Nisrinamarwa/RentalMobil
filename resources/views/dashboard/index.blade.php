@@ -9,7 +9,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <h5>Barang</h5>
-                            <h3>10</h3>
+                            <h3>{{$items}}</h3>
                         </div>
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-apple" viewBox="0 0 16 16">
@@ -27,7 +27,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <h5>Transaksi</h5>
-                            <h3>10</h3>
+                            <h3>{{$transaksi}}</h3>
                         </div>
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-apple" viewBox="0 0 16 16">

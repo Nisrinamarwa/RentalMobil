@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Transaction;
 use App\Item;
 use App\Pengembalian;
+use Nexmo\Laravel\Facade\Nexmo;
 
 class PengembalianController extends Controller
 {
@@ -32,6 +33,30 @@ class PengembalianController extends Controller
             'tglkembali_id' => $request->tglkembali_id,
             'nofaktur_id' => $request->nofaktur_id,
         ]);
+            if($return->save()) {
+                $transaksi = Transaction::findOrFail($id);
+
+                Nexmo::message()->send([
+                    'to' =>   $transaksi->phone,
+                    'from' => 'RINA',
+                    'text'  => 'Halo kami dari RentalMobilingin Memberitahu bahwa anda sudah  Mengembalikan Barang nya'
+    
+                   . 'Nama Peminjam:'.$transaksi->nama_peminjam
+                   . 'Tanggal Pinjam:'. $transaksi->tanggal_pinjam
+                   . 'Tanggal Kembali:'.$transaksi->tanggal_kembali
+                   . 'Jumlah Barang:'.$transaksi->jumlah
+                   . 'Harga:'. $transaksi->idr
+                   . 'Terima Kasih'
+                    ]);
+                
+                $get = item::findOrFail($return->kodebarang_id);
+
+                $hitung = $get->jumlah_barang + $transaksi->jumlah;
+
+                $get->update([
+                    'jumlah_barang' => $hitung
+                ]);
+            }
 
         return redirect()->back();
     }
