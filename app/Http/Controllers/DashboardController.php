@@ -13,7 +13,8 @@ class DashboardController extends Controller
         $data = [
             'items' => Item::count(),
             'transaksi' => Transaction::count(),
-            'telat' => Transaction::where(''),
+            'omset' => Transaction::sum('idr'),
+            'late'  => Transaction::where('durasi','Terlambat')->count(),
         ];
         return view('dashboard.index', $data);
     }

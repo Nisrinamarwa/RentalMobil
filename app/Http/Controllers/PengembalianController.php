@@ -36,26 +36,33 @@ class PengembalianController extends Controller
             if($return->save()) {
                 $transaksi = Transaction::findOrFail($id);
 
-                Nexmo::message()->send([
-                    'to' =>   $transaksi->phone,
-                    'from' => 'RINA',
-                    'text'  => 'Halo kami dari RentalMobilingin Memberitahu bahwa anda sudah  Mengembalikan Barang nya'
+                // Nexmo::message()->send([
+                //     'to' =>   $transaksi->phone,
+                //     'from' => 'RINA',
+                //     'text'  => 'Halo kami dari RentalMobilingin Memberitahu bahwa anda sudah  Mengembalikan Barang nya'
     
-                   . 'Nama Peminjam:'.$transaksi->nama_peminjam
-                   . 'Tanggal Pinjam:'. $transaksi->tanggal_pinjam
-                   . 'Tanggal Kembali:'.$transaksi->tanggal_kembali
-                   . 'Jumlah Barang:'.$transaksi->jumlah
-                   . 'Harga:'. $transaksi->idr
-                   . 'Terima Kasih'
-                    ]);
+                //    . 'Nama Peminjam:'.$transaksi->nama_peminjam
+                //    . 'Tanggal Pinjam:'. $transaksi->tanggal_pinjam
+                //    . 'Tanggal Kembali:'.$transaksi->tanggal_kembali
+                //    . 'Jumlah Barang:'.$transaksi->jumlah
+                //    . 'Harga:'. $transaksi->idr
+                //    . 'Terima Kasih'
+                //     ]);
                 
-                $get = item::findOrFail($return->kodebarang_id);
-
+            if ($return->save()) {
+                $get = Item::findOrFail($return->kodebarang_id);
+           
                 $hitung = $get->jumlah_barang + $transaksi->jumlah;
-
-                $get->update([
-                    'jumlah_barang' => $hitung
-                ]);
+                $jumlah = $transaksi->jumlah - $transaksi->jumlah;
+                    $get->update([
+                    'jumlah_barang' =>$hitung
+                    ]);
+                    $transaksi->update([
+                        'jumlah' => $jumlah,
+                        'durasi' => NULL
+                    ]);
+           
+                };
             }
 
         return redirect()->back();

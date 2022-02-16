@@ -67,10 +67,10 @@ class TransaksiController extends Controller
             $durasi2 = ($durasi).'Hari';
            
             if ($datenow > $datetime2) {
-                'Terlambat';
+                $durasi2 = 'Terlambat';
             }
-            else {
-                echo "$durasi Hari";
+            if ($datenow == $datetime2) {
+                $durasi2 = 'Kembalikan';
             }
 
             $transaction->update([
